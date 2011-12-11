@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0 }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript"
+    src="http://maps.googleapis.com/maps/api/js?sensor=true">
+</script>
+<script type="text/javascript">
+    function initialize() {
+        var latlng = new google.maps.LatLng(-34.397, 150.644);
+        var myOptions = {
+            zoom: 8,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+        myOptions);
+    }
+
+    function submitButtonClicked() {
+        var Json_response = 'https://maps.googleapis.com/maps/api/place/search/json?location=-33.8670522,151.1957362&radius=500&types=food&name=harbour&sensor=false&key=AIzaSyCUSULQyIsM83qVWrt6LJBQmNPQzke8VJQ';
+        var myObj = eval('('Json_response')');
+    
+    }
+
+
+
+</script>
+</head>
+<body onload="initialize()">
+    <div id="map_canvas" style="width:50%; height:50%"></div>
+    <form id="activityForm">
+        Guy's activity:<input type="text" name="guy_activity" value = "bar"/>
+        Girl's activity:<input type="text" name="girl_activity" />
+        <button id="submit_button" onclick="submitButtonClicked()" type="submit">Submit!</button>
+    </form>
+</body>
+</html>
