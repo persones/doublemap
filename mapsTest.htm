@@ -69,8 +69,9 @@
             for (var galIndex = 0; galIndex < galList.length; galIndex++) {
                 dist = Math.pow(guyList[guyIndex].lat() - galList[galIndex].lat(), 2) + Math.pow(guyList[guyIndex].lng() - galList[galIndex].lng(), 2);
                 i = 0;
-                while (dist > distList(i + 1)) {
+                while (dist > distList[i + 1]) {
                     i++;
+                }
                 distList.splice(i, 0, dist);
                 indexList.splice(i, 0, [guyIndex, galIndex]);
 			}
