@@ -8,25 +8,71 @@
   #map_canvas { height: 100% }
 </style>
 <script type="text/javascript"
-    src="http://maps.googleapis.com/maps/api/js?sensor=true">
+    src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places">
 </script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
 <script type="text/javascript">
+
+	var map, latlng;
+	// queryLists holds objects that are lists from the search query
+	var queryLists;
+	// these vars hold the latlngs for each query
+	var guyLatLngs, galLatLngs;
+
     function initialize() {
-        var latlng = new google.maps.LatLng(-34.397, 150.644);
+        latlng = new google.maps.LatLng(42.4, -71.1);
         var myOptions = {
             zoom: 8,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     }
 
     function submitButtonClicked() {
-        var Json_response = 'https://maps.googleapis.com/maps/api/place/search/json?location=-33.8670522,151.1957362&radius=500&types=food&name=harbour&sensor=false&key=AIzaSyCUSULQyIsM83qVWrt6LJBQmNPQzke8VJQ';
-        var myObj = eval('(' + Json_response + ')');
-    
-    }
+		
+		var guy = document.getElementById("guy_activity").value;
+		var request = {
+			location: latlng,
+			radius: 500,
+			sensor: false,
+			keyword: guy
+        };
+        var service = new google.maps.places.PlacesService(map);
+        service.search(request, callback);
 
+		var gal = document.getElementById("gal_activity").value;
+		request = {
+			location: latlng,
+			radius: 500,
+			sensor: false,
+			keyword: gal
+        };
+        service.search(request, callback);
+
+		// from queryLists, make the latLngs
+		guyLatLngs = makeLatLngs(queryLists[0]);
+		galLatLngs = makeLatLngs(queryLists[1]);
+		
+		// call Eyal's distance calculator
+		
+    }
+	
+	function callback(results, status) {
+		if (status == google.maps.places.PlacesServiceStatus.OK) {
+			queryLists.push(results);
+        }
+	}
+	
+	function makeLatLngs(aList) {
+		var coord, latLngs;
+		for (var i = 0; i < aList.length; i++) {
+			coord[0] = aList[i].geometry.location.Qa;
+			coord[1] = aList[i].geometry.location.Ra;
+			latLngs.push(coord);
+		}
+		return latLngs;
+	}
 
 
 </script>
@@ -34,9 +80,13 @@
 <body onload="initialize()">
     <div id="map_canvas" style="width:50%; height:50%"></div>
     <form id="activityForm">
-        Guy's activity:<input type="text" name="guy_activity" value = "bar"/>
-        Girl's activity:<input type="text" name="girl_activity" />
-        <button id="submit_button" onclick="submitButtonClicked()" type="submit">Submit!</button>
+        Guy's activity:<input type="text" id="guy_activity" value = "bar"/>
+        Girl's activity:<input type="text" id="gal_activity" value = "food"/>
+        <button id="submit_button" onclick="submitButtonClicked()" type="button">Submit!</button>
     </form>
+
+	<div id = "guy">guy</div>
+	<div id = "gal">gal</div>
+	<div id = "debug">debug</div>
 </body>
 </html>
