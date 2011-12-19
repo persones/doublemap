@@ -24,7 +24,23 @@
     function submitButtonClicked() {
         var Json_response = 'https://maps.googleapis.com/maps/api/place/search/json?location=-33.8670522,151.1957362&radius=500&types=food&name=harbour&sensor=false&key=AIzaSyCUSULQyIsM83qVWrt6LJBQmNPQzke8VJQ';
         var myObj = eval('(' + Json_response + ')');
+    }
     
+    function sortDistances(guyList, galList) {
+        
+        var distList;
+        var indexList;
+        for (guyIndex = 0; guyIndex < guyList.length; guyIndex++) {
+            for (galIndex = 0; galIndex < galList.length; galIndex++) {
+                dist = Math.pow(guyList[guyIndex].lan() - galList[galIndex].lan(), 2) + Math.pow(guyList[guyIndex].lng() - galList[galIndex].lng(), 2);
+                i = 0;
+                while (dist > distList(i + 1)) {
+                    i++;
+                distList.splice(i, 0, dist);
+                indexList.splice(i, 0, [guyIndex, galIndex]);
+            }
+        }
+        return (indexList);
     }
 
 
