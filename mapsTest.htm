@@ -15,7 +15,7 @@
 
 	var map, latlng;
 	// queryLists holds objects that are lists from the search query
-	var queryLists;
+	var queryLists = [];
 	// these vars hold the latlngs for each query
 	var guyLatLngs, galLatLngs;
 
@@ -57,8 +57,8 @@
 		document.getElementById('gal').innerHTML = galLatLngs;
 		
 		// call Eyal's distance calculator
-		indexList = sortDistances(guyLatLngs, galLatLngs);
-		
+		var indexList = sortDistances(guyLatLngs, galLatLngs);
+		document.getElementById('debug').innerHTML = indexList;
     }
     
     function sortDistances(guyList, galList) {
@@ -69,8 +69,9 @@
             for (var galIndex = 0; galIndex < galList.length; galIndex++) {
                 dist = Math.pow(guyList[guyIndex].lat() - galList[galIndex].lat(), 2) + Math.pow(guyList[guyIndex].lng() - galList[galIndex].lng(), 2);
                 i = 0;
-                while (dist > distList(i + 1)) {
+                while (dist > distList[i + 1]) {
                     i++;
+				}
                 distList.splice(i, 0, dist);
                 indexList.splice(i, 0, [guyIndex, galIndex]);
 			}
@@ -85,7 +86,7 @@
 	}
 	
 	function makeLatLngs(aList) {
-		var latLngs;
+		var latLngs = [];
 		for (var i = 0; i < aList.length; i++) {
 			latLngs.push(new google.maps.LatLng(aList[i].geometry.location.Qa, aList[i].geometry.location.Ra));
 		}
